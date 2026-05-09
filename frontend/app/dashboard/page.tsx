@@ -54,7 +54,7 @@ export default function DashboardPage() {
         {STAT_CARDS.map(c => (
           <div key={c.key} style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: "20px 20px", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
             <div style={{ width: 36, height: 36, background: c.bg, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12, fontSize: 18 }}>{c.icon}</div>
-            <div style={{ fontSize: 28, fontWeight: 800, color: c.color, marginBottom: 2 }}>{stats?.[c.key as keyof Stats] ?? 0}</div>
+            <div style={{ fontSize: 28, fontWeight: 800, color: c.color, marginBottom: 2 }}>{stats?.[c.key as keyof Omit<Stats, "tasksPerUser">] ?? 0}</div>
             <div style={{ fontSize: 13, color: "#64748B", fontWeight: 500 }}>{c.label}</div>
           </div>
         ))}
@@ -79,7 +79,7 @@ export default function DashboardPage() {
               {[["completed", "Completed", "#10B981"], ["inProgress", "In Progress", "#3B82F6"], ["review", "Review", "#F59E0B"], ["todo", "To Do", "#94A3B8"]].map(([k, l, c]) => (
                 <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: c }} />
-                  <span style={{ fontSize: 13, color: "#475569" }}>{l}: <strong>{stats?.[k as keyof Stats] ?? 0}</strong></span>
+                  <span style={{ fontSize: 13, color: "#475569" }}>{l}: <strong>{stats?.[k as keyof Omit<Stats, "tasksPerUser">] ?? 0}</strong></span>
                 </div>
               ))}
             </div>
