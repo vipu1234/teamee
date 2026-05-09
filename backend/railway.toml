@@ -2,6 +2,6 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "npx prisma migrate deploy --schema=prisma/schema.prisma && node --import tsx/esm src/app.ts"
+startCommand = "npx prisma db push --schema=prisma/schema.prisma && node --import tsx/esm src/app.ts"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
