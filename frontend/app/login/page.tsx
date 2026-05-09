@@ -17,7 +17,8 @@ export default function LoginPage() {
       await api.post("/auth/login", form);
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err.response?.data?.error || "Login failed");
+      console.error("Login Error:", err);
+      setError(err.response?.data?.error || err.message || "Login failed");
     } finally { setLoading(false); }
   };
 

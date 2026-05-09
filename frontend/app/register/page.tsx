@@ -17,7 +17,8 @@ export default function RegisterPage() {
       await api.post("/auth/signup", form);
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err.response?.data?.error || "Registration failed");
+      console.error("Signup Error:", err);
+      setError(err.response?.data?.error || err.message || "Registration failed");
     } finally { setLoading(false); }
   };
 
