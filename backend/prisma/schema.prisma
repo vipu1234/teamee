@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -59,7 +59,7 @@ model Task {
   status      String    @default("TODO")
   priority    String    @default("MEDIUM")
   dueDate     DateTime?
-  tags        String    @default("[]")
+  tags        String[]  @default([])
   projectId   String
   assigneeId  String?
   creatorId   String

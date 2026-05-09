@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/app.ts",
-    "start": "npx prisma migrate deploy --schema=prisma/schema.prisma && node --import tsx/esm src/app.ts",
-    "build": "npx prisma generate --schema=prisma/schema.prisma"
+    "build": "npx prisma generate --schema=prisma/schema.prisma",
+    "start": "npx prisma migrate deploy --schema=prisma/schema.prisma && node --import tsx/esm src/app.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",

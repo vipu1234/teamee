@@ -2,15 +2,6 @@ import type { Response, NextFunction } from 'express';
 import prisma from '../utils/prisma.ts';
 import type { AuthRequest } from '../middleware/auth.ts';
 
-const parseTags = (tags: unknown): string[] => {
-  if (Array.isArray(tags)) return tags as string[];
-  if (typeof tags === 'string') { try { return JSON.parse(tags) as string[]; } catch { return []; } }
-  return [];
-};
-const serializeTags = (tags?: string[]): string => JSON.stringify(tags ?? []);
-
-const enrichTask = (task: any) => ({ ...task, tags: parseTags(task.tags) });
-
 export const getMyTasks = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId = req.user!.id;
@@ -24,7 +15,7 @@ export const getMyTasks = async (req: AuthRequest, res: Response, next: NextFunc
       },
       orderBy: { createdAt: 'desc' },
     });
-    res.json({ success: true, data: tasks.map(enrichTask) });
+    res.json({ success: true, data: tasks });
   } catch (err) { next(err); }
 };
 
@@ -42,7 +33,7 @@ export const getTasksByProject = async (req: AuthRequest, res: Response, next: N
       },
       orderBy: { createdAt: 'desc' },
     });
-    res.json({ success: true, data: tasks.map(enrichTask) });
+    res.json({ success: true, data: tasks });
   } catch (err) { next(err); }
 };
 
@@ -62,7 +53,7 @@ export const createTask = async (req: AuthRequest, res: Response, next: NextFunc
         projectId,
         creatorId: userId,
         assigneeId: assigneeId ?? userId,
-        tags: serializeTags(tags),
+        tags: tags ?? [],
         ...(dueDate ? { dueDate: new Date(dueDate) } : {}),
       },
       include: {
@@ -71,7 +62,7 @@ export const createTask = async (req: AuthRequest, res: Response, next: NextFunc
         creator: { select: { id: true, name: true, email: true, avatar: true } },
       },
     });
-    res.status(201).json({ success: true, data: enrichTask(task) });
+    res.status(201).json({ success: true, data: task });
   } catch (err) { next(err); }
 };
 
@@ -95,7 +86,7 @@ export const updateTask = async (req: AuthRequest, res: Response, next: NextFunc
         ...(status ? { status } : {}),
         ...(priority ? { priority } : {}),
         ...(assigneeId !== undefined ? { assigneeId } : {}),
-        ...(tags !== undefined ? { tags: serializeTags(tags) } : {}),
+        ...(tags !== undefined ? { tags } : {}),
         ...(dueDate !== undefined ? { dueDate: dueDate ? new Date(dueDate) : null } : {}),
       },
       include: {
@@ -104,7 +95,7 @@ export const updateTask = async (req: AuthRequest, res: Response, next: NextFunc
         creator: { select: { id: true, name: true, email: true, avatar: true } },
       },
     });
-    res.json({ success: true, data: enrichTask(updated) });
+    res.json({ success: true, data: updated });
   } catch (err) { next(err); }
 };
 
